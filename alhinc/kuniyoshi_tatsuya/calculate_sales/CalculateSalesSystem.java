@@ -72,7 +72,6 @@ public class CalculateSalesSystem {
 				while((indata = br.readLine()) != null){
 					if(cnt == 3){
 						String[][] error = new String[1][2];
-						//System.out.println(rcdfiles.get(i).getName());
 						error[0][0] = rcdfiles.get(i).getName();
 						error[0][1] = "0";
 						return error;
@@ -82,7 +81,6 @@ public class CalculateSalesSystem {
 				}
 				if(cnt != 3){
 					String[][] error = new String[1][2];
-					//System.out.println(rcdfiles.get(i).getName());
 					error[0][0] = rcdfiles.get(i).getName();
 					error[0][1] = "0";
 					return error;
@@ -90,14 +88,12 @@ public class CalculateSalesSystem {
 
 				if(!branch.containsKey(salesdata[i][BRANCH_CODE])){
 					String[][] error = new String[1][2];
-					//System.out.println(rcdfiles.get(i).getName());
 					error[0][0] = rcdfiles.get(i).getName();
 					error[0][1] = "0";
 					return error;
 				}
 				if(!commodity.containsKey(salesdata[i][COMMODITY_CODE])){
 					String[][] error = new String[1][2];
-					//System.out.println(rcdfiles.get(i).getName());
 					error[0][0] = rcdfiles.get(i).getName();
 					error[0][1] = "1";
 					return error;
@@ -151,7 +147,6 @@ public class CalculateSalesSystem {
 			String str = "0";
 			for (Entry<String,Long> e : entries) {
 				str = e.getKey() + "," + map1.get(e.getKey()) + "," + e.getValue();
-	            System.out.println(e.getKey() + "," + map1.get(e.getKey()) + "," + e.getValue());
 	            bw.write(str);
 	            bw.newLine();
 	        }
@@ -182,7 +177,6 @@ public class CalculateSalesSystem {
 			String str = "0";
 			for (Entry<String,Long> e : entries) {
 				str = e.getKey() + "," + map1.get(e.getKey()) + "," + e.getValue();
-	            System.out.println(e.getKey() + "," + map1.get(e.getKey()) + "," + e.getValue());
 	            bw.write(str);
 	            bw.newLine();
 	        }
@@ -290,7 +284,6 @@ public class CalculateSalesSystem {
 			commoditysales = fileOutputCommodity(commodity, commoditysales, new File(args[0], "commodity.out")); //commodityをアウトプット
 
 		}catch (Exception e) {
-			//e.printStackTrace();
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
