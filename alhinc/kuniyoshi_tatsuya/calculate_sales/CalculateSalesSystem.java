@@ -245,7 +245,7 @@ public class CalculateSalesSystem {
 			String[][] salesdata = new String[rcdfiles.size()][3]; //売上データ
 			salesdata = readSalesData(rcdfiles, branch, commodity,args[0]);//売上ファイル読み込み
 			if(salesdata[0][1] == "2"){
-				System.out.println(salesdata[0][0] + "フォーマットが不正です");
+				System.out.println(salesdata[0][0] + "のフォーマットが不正です");
 				return;
 			}
 			if(salesdata[0][1] == "0"){
