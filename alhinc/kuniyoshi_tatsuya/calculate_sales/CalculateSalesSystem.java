@@ -73,7 +73,7 @@ public class CalculateSalesSystem {
 					if(cnt == 3){
 						String[][] error = new String[1][2];
 						error[0][0] = rcdfiles.get(i).getName();
-						error[0][1] = "0";
+						error[0][1] = "2";
 						return error;
 					}
 					salesdata[i][cnt] = indata;
@@ -82,7 +82,7 @@ public class CalculateSalesSystem {
 				if(cnt != 3){
 					String[][] error = new String[1][2];
 					error[0][0] = rcdfiles.get(i).getName();
-					error[0][1] = "0";
+					error[0][1] = "2";
 					return error;
 				}
 
@@ -222,7 +222,7 @@ public class CalculateSalesSystem {
 			}
 			HashMap<String,String> commodity = readCommodityData(new File(args[0], "commodity.lst")); //商品定義ファイル読み込み
 			if(commodity.size() == 0){
-				System.out.println("支店定義ファイルのフォーマットが不正です");
+				System.out.println("商品定義ファイルのフォーマットが不正です");
 				return;
 			}
 			for(Map.Entry<String, String> e : commodity.entrySet()) {
@@ -238,7 +238,7 @@ public class CalculateSalesSystem {
 
 			ArrayList<File> rcdfiles = checkSalesData(new File(args[0])); //.rcdファイルを取得する
 			if(rcdfiles.size() == 0){
-				System.out.println("売上ファイルが連番になっていません");
+				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			}
 
