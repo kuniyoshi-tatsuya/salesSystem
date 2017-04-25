@@ -16,28 +16,26 @@ import java.util.Map.Entry;
 
 public class CalculateSalesSystem {
 
-	public static HashMap<String,String> readBranchData(File file) throws IOException{
-		HashMap<String,String> branch = new HashMap<String,String>();
+	public static HashMap<String, String> readBranchData(File file) throws IOException{
+		HashMap<String, String> branch = new HashMap<>();
 		BufferedReader br = null;
 		try{
 			br = new BufferedReader(new FileReader(file));
 			String str;
 			while((str = br.readLine()) != null){
 				String[] split = str.split(",");
-				if(split.length != 2){
-					return new HashMap<String,String>();
-				}
-				branch.put(split[0],split[1]);
+				if(split.length != 2) return new HashMap<String,String>();
+				branch.put(split[0], split[1]);
 			}
 		}finally{
-			 br.close();
+			if(br != null) br.close();
 		}
 		return branch;
 
 	}
 
-	public static HashMap<String,String> readCommodityData(File file) throws IOException{
-		HashMap<String,String> commodity = new HashMap<String,String>();
+	public static HashMap<String, String> readCommodityData(File file) throws IOException{
+		HashMap<String, String> commodity = new HashMap<>();
 		BufferedReader br = null;
 		try{
 			FileReader fr = new FileReader(file);
@@ -46,14 +44,12 @@ public class CalculateSalesSystem {
 			String str;
 			while((str = br.readLine()) != null){
 				String[] split = str.split(",");
-				if(split.length != 2){
-					return new HashMap<String,String>();
-				}
-				commodity.put(split[0],split[1]);
+				if(split.length != 2) return new HashMap<String,String>();
+				commodity.put(split[0], split[1]);
 			}
 
 		}finally{
-			br.close();
+			if(br != null) br.close();
 		}
 		return commodity;
 	}
@@ -64,10 +60,10 @@ public class CalculateSalesSystem {
 		final int BRANCH_CODE = 0, COMMODITY_CODE = 1;
 		BufferedReader br = null;
 		try{
-			for(int i=0; i<rcdfiles.size(); i++){
+			for(int i = 0; i < rcdfiles.size(); i++){
 				br = new BufferedReader(new FileReader(new File(arg, rcdfiles.get(i).getName())));
 				String indata;
-				int cnt=0;
+				int cnt = 0;
 
 				while((indata = br.readLine()) != null){
 					if(cnt == 3){
@@ -102,7 +98,7 @@ public class CalculateSalesSystem {
 		}catch(IOException e){
 			throw e;
 		}finally {
-			br.close();
+			if(br != null) br.close();
 		}
 
 		return salesdata;
@@ -112,31 +108,26 @@ public class CalculateSalesSystem {
 
 		ArrayList<File> files = new ArrayList<>();
 		for(File fl : directory.listFiles()){
-			if(fl.getName().endsWith(".rcd") && fl.getName().matches("^.{12}$") && fl.isFile()) {
-				files.add(fl);
-			}
+			if(fl.getName().endsWith(".rcd") && fl.getName().matches("^.{12}$") && fl.isFile()) files.add(fl);
 		}
 
-		long min = Long.parseLong(files.get(0).getName().substring(0,8));
-		long max = Long.parseLong(files.get(files.size()-1).getName().substring(0,8));
-		if(files.size() == max-min+1)return files;
+		long min = Long.parseLong(files.get(0).getName().substring(0, 8));
+		long max = Long.parseLong(files.get(files.size()-1).getName().substring(0, 8));
+		if(files.size() == max - min + 1)return files;
 		else return new ArrayList<File>();
 	}
 
-	public static Map<String,Long> initializeMap(HashMap<String,String> source){
-		HashMap<String,Long> map = new HashMap<>();
-		for(Map.Entry<String, String> e : source.entrySet()){ //支店の数だけ回す
-			map.put(e.getKey(), 0L);
-		}
-
+	public static Map<String, Long> initializeMap(HashMap<String, String> source){
+		HashMap<String, Long> map = new HashMap<>();
+		for(Map.Entry<String, String> e : source.entrySet()) map.put(e.getKey(), 0L); //支店の数だけ回す
 		return map;
 	}
 
-	public static Map<String,Long> fileOutputBranch(Map<String,String> map1, Map<String,Long> map2, File file) throws Exception{
-		List<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String,Long>>(map2.entrySet());
-		Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
+	public static Map<String, Long> fileOutputBranch(Map<String, String> map1, Map<String, Long> map2, File file) throws Exception{
+		List<Map.Entry<String, Long>> entries = new ArrayList<>(map2.entrySet());
+		Collections.sort(entries, new Comparator<Map.Entry<String, Long>>() {
 			public int compare(
-				Entry<String,Long> entry1, Entry<String,Long> entry2) {
+				Entry<String, Long> entry1, Entry<String, Long> entry2) {
 				return ((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
 			}
 		});
@@ -145,7 +136,7 @@ public class CalculateSalesSystem {
 		try{
 			bw = new BufferedWriter(new FileWriter(file));
 			String str = "0";
-			for (Entry<String,Long> e : entries) {
+			for (Entry<String, Long> e : entries) {
 				str = e.getKey() + "," + map1.get(e.getKey()) + "," + e.getValue();
 	            bw.write(str);
 	            bw.newLine();
@@ -155,17 +146,17 @@ public class CalculateSalesSystem {
 		}catch(Exception e){
 			System.out.println(e);
 		}finally{
-			bw.close();
+			if(bw != null) bw.close();
 		}
 		return map2;
 	}
 
-	public static Map<String,Long> fileOutputCommodity(Map<String,String> map1, Map<String,Long> map2, File file) throws Exception{
+	public static Map<String, Long> fileOutputCommodity(Map<String, String> map1, Map<String, Long> map2, File file) throws Exception{
 
-		List<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String,Long>>(map2.entrySet());
-		Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
+		List<Map.Entry<String, Long>> entries = new ArrayList<>(map2.entrySet());
+		Collections.sort(entries, new Comparator<Map.Entry<String, Long>>() {
 			public int compare(
-				Entry<String,Long> entry1, Entry<String,Long> entry2) {
+				Entry<String, Long> entry1, Entry<String, Long> entry2) {
 				return ((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
 			}
 		});
@@ -175,7 +166,7 @@ public class CalculateSalesSystem {
 
 			bw = new BufferedWriter(new FileWriter(file));
 			String str = "0";
-			for (Entry<String,Long> e : entries) {
+			for (Entry<String, Long> e : entries) {
 				str = e.getKey() + "," + map1.get(e.getKey()) + "," + e.getValue();
 	            bw.write(str);
 	            bw.newLine();
@@ -185,7 +176,7 @@ public class CalculateSalesSystem {
 		}catch(Exception e){
 			System.out.println(e);
 		}finally{
-			bw.close();
+			if(bw != null) bw.close();
 		}
 
 		return map2;
@@ -204,7 +195,7 @@ public class CalculateSalesSystem {
 				System.out.println("支店定義ファイルが存在しません");
 				return ;
 			}
-			HashMap<String,String> branch = readBranchData(new File(args[0], "branch.lst")); //支店コードファイル読み込み
+			HashMap<String, String> branch = readBranchData(new File(args[0], "branch.lst")); //支店コードファイル読み込み
 			if(branch.size() == 0){
 				System.out.println("支店定義ファイルのフォーマットが不正です");
 				return;
@@ -220,7 +211,7 @@ public class CalculateSalesSystem {
 				System.out.println("商品定義ファイルが存在しません");
 				return ;
 			}
-			HashMap<String,String> commodity = readCommodityData(new File(args[0], "commodity.lst")); //商品定義ファイル読み込み
+			HashMap<String, String> commodity = readCommodityData(new File(args[0], "commodity.lst")); //商品定義ファイル読み込み
 			if(commodity.size() == 0){
 				System.out.println("商品定義ファイルのフォーマットが不正です");
 				return;
@@ -232,8 +223,8 @@ public class CalculateSalesSystem {
 				}
 			}
 
-			Map<String,Long> branchsales = new HashMap<>(); //支店別売上集計データ
-			Map<String,Long> commoditysales = new HashMap<>(); //商品別売上集計データ
+			Map<String, Long> branchsales = new HashMap<>(); //支店別売上集計データ
+			Map<String, Long> commoditysales = new HashMap<>(); //商品別売上集計データ
 			final int BRANCH_CODE = 0, COMMODITY_CODE = 1, SALES = 2;
 
 			ArrayList<File> rcdfiles = checkSalesData(new File(args[0])); //.rcdファイルを取得する
@@ -263,8 +254,8 @@ public class CalculateSalesSystem {
 			for(String[] salesFile : salesdata){
 				long n = Long.parseLong(salesFile[SALES]);
 				long m = branchsales.get(salesFile[BRANCH_CODE]);
-				branchsales.put(salesFile[BRANCH_CODE], n+m);
-				if(!String.valueOf(n+m).matches("^\\d{1,10}$")){
+				branchsales.put(salesFile[BRANCH_CODE], n + m);
+				if(!String.valueOf(n + m).matches("^\\d{1,10}$")){
 					System.out.println("合計金額が10桁を超えました");
 					return;
 				}
@@ -273,8 +264,8 @@ public class CalculateSalesSystem {
 			for(String[] salesFile : salesdata){
 				long n = Long.parseLong(salesFile[SALES]);
 				long m = commoditysales.get(salesFile[COMMODITY_CODE]);
-				commoditysales.put(salesFile[COMMODITY_CODE], n+m);
-				if(!String.valueOf(n+m).matches("^\\d{1,10}$")){
+				commoditysales.put(salesFile[COMMODITY_CODE], n + m);
+				if(!String.valueOf(n + m).matches("^\\d{1,10}$")){
 					System.out.println("合計金額が10桁を超えました");
 					return;
 				}
